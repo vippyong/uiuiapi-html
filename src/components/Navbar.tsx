@@ -1,41 +1,80 @@
+"use client";
 
-import LogoImage from '../assets/icons/logo.svg';
-import MenuIcon from '../assets/icons/menu.svg';
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
 
+const items = [
+  { title: "模型列表", href: "#models", desc: "200+ 模型实时更新" },
+  { title: "API 文档", href: "https://api.uiuiapi.com/docs", desc: "OpenAI 官方格式兼容" },
+  { title: "价格计算器", href: "#pricing", desc: "实时查看充值比例" },
+  { title: "控制台", href: "https://dash.uiuiapi.com", desc: "管理 API Key 与用量" },
+];
 
-export const Navbar = () => {
+export function NavigationMenuDemo() {
   return (
-    <div className="bg-black">
-      <div className="px-4">
-    <div className="container bg-black">
-      <div className="py-4 flex items-center justify-between">
+    <div className="flex items-center gap-8">
+      <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+        UIUIAPI
+      </Link>
 
-      <div className="relative">
-        <div className='absolute w-full top-2 bottom-0 bg-[linear-gradient(to_right,#F7AABE,#B57CEC,#E472D1)] blur-md '></div>
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>产品</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                {items.map((item) => (
+                  <ListItem key={item.title} title={item.title} href={item.href}>
+                    {item.desc}
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
-      <LogoImage className="h-12 w-12 relative mt-1"/>
-      </div>
-      <div className='border border-white border-opacity-30 h-10 w-10 inline-flex justify-center items-center rounded-lg sm:hidden'>
+          <NavigationMenuItem>
+            <Link href="https://dash.uiuiapi.com/login" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                登录
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
 
-      <MenuIcon className="text-white" />
-      </div>
-      <nav className='text-white gap-6 items-center hidden sm:flex'>
-        
-        <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition' >About</a>
-        <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition'>Features</a>
-        <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition'>Updates</a>
-        <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition'>Help</a>
-        <a href="#" className='text-opacity-60 text-white hover:text-opacity-100 transition'>Customers</a>
-        <button className='bg-white py-2 px-4 rounded-lg text-black'>Get for free</button>
-      </nav>
-
-      </div>
-
-
-
-
+          <NavigationMenuItem>
+            <Button asChild>
+              <Link href="https://dash.uiuiapi.com/register">立即注册</Link>
+            </Button>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
-    </div>
-    </div>
-  )
+  );
+}
+
+const ListItem = ({ title, href, children }: { title: string; href: string; children: React.ReactNode }) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          href={href}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+          )}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
 };
